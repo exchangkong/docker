@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  php:
+    build:
+      context: ../DockerFile
+      dockerfile: php
+      cache_from:
+        - php:8.3.7-fpm-alpine3.19
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./etc/php-fpm.conf:/usr/local/etc/php-fpm.conf
+      - ./etc/php-fpm.d:/usr/local/etc/php-fpm.d
+      - ./etc/php/php.ini:/usr/local/etc/php/php.ini
+      - ./logs/php:/usr/local/var/log
+    cap_add:
+      - ALL
+    #command: ["/bin/sh", "-c", "php-fpm && nginx -g 'daemon off;'"]
+    networks:
+      - server
+  nginx:
+    image: nginx:stable-alpine3.19-perl
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./etc/nginx/http.d:/etc/nginx/http.d
+      - ${WWWROOT}:/var/www/html/php-server
+      - ./logs/nginx:/var/log/nginx
+      - ${CERTROOT}:/var/cert
+      - ${FRONTROOT}:/var/www/html/frontend
+    cap_add:
+      - ALL
+    #command: ["/bin/sh", "-c", "php-fpm && nginx -g 'daemon off;'"]
+    networks:
+      - server
