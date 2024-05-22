@@ -18,7 +18,7 @@ services:
       - ./logs/php:/usr/local/var/log
     cap_add:
       - ALL
-    #command: ["/bin/sh", "-c", "php-fpm && nginx -g 'daemon off;'"]
+    #command: ["/bin/sh", "-c", "php-fpm"]
     networks:
       - server
   nginx:
@@ -34,7 +34,7 @@ services:
       - ${FRONTROOT}:/var/www/html/frontend
     cap_add:
       - ALL
-    #command: ["/bin/sh", "-c", "php-fpm && nginx -g 'daemon off;'"]
+    #command: ["/bin/sh", "-c", "nginx -g 'daemon off;'"]
     networks:
       - server
 
