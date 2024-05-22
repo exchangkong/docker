@@ -2,15 +2,15 @@
 services:
   php:
     build:
-      context: ../DockerFile
+      context: ./DockerFile
       dockerfile: php
       cache_from:
         - php:8.3.7-fpm-alpine3.19
     ports:
       - "9000:9000"
     volumes:
-      - ./etc/php-fpm.conf:/usr/local/etc/php-fpm.conf
-      - ./etc/php-fpm.d:/usr/local/etc/php-fpm.d
+      - ./etc/php/php-fpm.conf:/usr/local/etc/php-fpm.conf
+      - ./etc/php/php-fpm.d:/usr/local/etc/php-fpm.d
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini
       - ./logs/php:/usr/local/var/log
     cap_add:
