@@ -13,6 +13,8 @@ services:
       - ./etc/php/php-fpm.conf:/usr/local/etc/php-fpm.conf
       - ./etc/php/php-fpm.d:/usr/local/etc/php-fpm.d
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini
+      - ./etc/php/pear.conf:/usr/local/etc/php/pear.conf
+      #- ./etc:/usr/local/etc
       - ./logs/php:/usr/local/var/log
     cap_add:
       - ALL
