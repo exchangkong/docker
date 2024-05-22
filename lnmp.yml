@@ -4,9 +4,9 @@ services:
     build:
       context: ./DockerFile
       dockerfile: php
-      cache_from:
-        - php:8.3.7-fpm-alpine3.19
-    image: php:8.3.7-fpm-alpine3.19-custom
+      #cache_from:
+      #  - php:8.3.7-fpm-alpine3.19
+    #image: php:8.3.7-fpm-alpine3.19-custom
     ports:
       - "9000:9000"
     volumes:
