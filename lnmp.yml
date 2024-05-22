@@ -14,7 +14,6 @@ services:
       - ./etc/php/php-fpm.d:/usr/local/etc/php-fpm.d
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini
       - ./etc/php/pear.conf:/usr/local/etc/php/pear.conf
-      #- ./etc:/usr/local/etc
       - ./logs/php:/usr/local/var/log
     cap_add:
       - ALL
@@ -28,10 +27,10 @@ services:
       - "443:443"
     volumes:
       - ./etc/nginx/http.d:/etc/nginx/http.d
-      - ${WWWROOT}:/var/www/html/php-server
+      - ${WWWROOT}:/var/www/html
       - ./logs/nginx:/var/log/nginx
       - ${CERTROOT}:/var/cert
-      - ${FRONTROOT}:/var/www/html/frontend
+      #- ${FRONTROOT}:/var/www/html/frontend
     cap_add:
       - ALL
     #command: ["/bin/sh", "-c", "nginx -g 'daemon off;'"]
