@@ -6,7 +6,8 @@ services:
       dockerfile: php-dev
       #cache_from:
       #  - php:8.3.7-fpm-alpine3.19
-    #image: php:8.3.7-fpm-alpine3.19-custom
+    #自定义构建镜像名称，使用次参数会用warning提示
+    image: php:8.3.7-fpm-alpine3.19-custom
     ports:
       - "9000:9000"
     volumes:
