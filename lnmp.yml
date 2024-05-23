@@ -28,7 +28,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./etc/nginx/http.d:/etc/nginx/http.d
+      - ./etc/nginx/conf.d:/etc/nginx/conf.d
       - ${WWWROOT}:/var/www/html
       - ./logs/nginx:/var/log/nginx
       - ${CERTROOT}:/var/cert
