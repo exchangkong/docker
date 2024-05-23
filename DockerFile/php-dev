@@ -1,8 +1,8 @@
-FROM php:8.3.7-fpm-alpine3.19 AS php-base
+FROM php:8.3.7-fpm-alpine3.19
 
 RUN apk update && apk add --no-cache --virtual .build-deps \
-	$PHPIZE_DEPS \
-	rabbitmq-c-dev \
+        $PHPIZE_DEPS \
+        rabbitmq-c-dev \
     freetype \
     libpng \
     libjpeg-turbo \
@@ -13,14 +13,14 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     imagemagick-dev \
     libmemcached-libs \
     libmemcached-dev zlib-dev \
-    && pecl install imagick-3.4.4 \
-    && docker-php-ext-enable imagick \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && pecl install redis \
     && docker-php-ext-enable redis \
     && pecl install amqp \
     && docker-php-ext-enable amqp \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick \
     && docker-php-ext-install -j$(nproc) pdo_mysql \
     && pecl install memcached \
     && docker-php-ext-enable memcached \
@@ -28,38 +28,20 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
 
 # 安装 runtime 依赖
 RUN apk add --no-cache rabbitmq-c \
-	libpng \
-	libjpeg-turbo \
-	freetype \
-	imagemagick \
-	libmemcached-libs
+        libpng \
+        libjpeg-turbo \
+        freetype \
+        imagemagick \
+        libmemcached-libs
 
 # 清理缓存
 RUN rm -rf /var/cache/apk/*
 
-FROM php-base AS build
-
 # 安装 Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-# 设置工作目录
-WORKDIR /var/www/html
-
-# 复制项目文件到容器中
-COPY ./ /var/www/html
-
-# 安装项目依赖
-RUN composer install --no-dev --optimize-autoloader
-
-
-ARG PATH_NAME=php-server
-
-FROM php-base
 
 # 设置工作目录
 WORKDIR /var/www/html
-
-# 复制项目文件到生产镜像中
-COPY --from=build /var/www/html /var/www/html/${PATH_NAME}
 
 # 暴露端口
 EXPOSE 9000

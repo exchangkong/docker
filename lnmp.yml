@@ -3,7 +3,7 @@ services:
   php:
     build:
       context: ./DockerFile
-      dockerfile: php
+      dockerfile: php-dev
       #cache_from:
       #  - php:8.3.7-fpm-alpine3.19
     #image: php:8.3.7-fpm-alpine3.19-custom
@@ -15,6 +15,7 @@ services:
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini
       - ./etc/php/pear.conf:/usr/local/etc/php/pear.conf
       - ./logs/php:/usr/local/var/log
+      - ${WWWROOT}:/var/www/html
     cap_add:
       - ALL
     #command: ["/bin/sh", "-c", "php-fpm"]
