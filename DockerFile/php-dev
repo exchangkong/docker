@@ -13,6 +13,17 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     imagemagick-dev \
     libmemcached-libs \
     libmemcached-dev zlib-dev \
+    libc6-compat \
+    git \
+    && cd / \
+    && git clone https://github.com/exchangkong/php7-wxwork-finance-sdk.git \
+    && cd /php7-wxwork-finance-sdk \
+    && cp ./libWeWorkFinanceSdk_C.so /usr/lib/ \
+    && phpize \
+    && ./configure --with-php-config=/usr/local/bin/php-config --with-wxwork-finance-sdk=/php7-wxwork-finance-sdk/ \
+    && make && make install \
+    && docker-php-ext-enable wxwork_finance_sdk \
+    && rm -rf /php7-wxwork-finance-sdk \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && pecl install redis \
@@ -24,19 +35,21 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     && docker-php-ext-install -j$(nproc) pdo_mysql \
     && pecl install memcached \
     && docker-php-ext-enable memcached \
-    && apk del .build-deps libmemcached-dev zlib-dev freetype-dev libpng-dev libjpeg-turbo-dev
+    && apk del .build-deps libmemcached-dev zlib-dev freetype-dev libpng-dev libjpeg-turbo-dev 
 
 # 安装 runtime 依赖
-RUN apk add --no-cache rabbitmq-c \
+RUN apk add --no-cache \
+        rabbitmq-c \
         libpng \
         libjpeg-turbo \
         freetype \
         imagemagick \
-        libmemcached-libs
-
+        libmemcached-libs \
+        libc6-compat \
+#
 # 清理缓存
 RUN rm -rf /var/cache/apk/* \
-    echo "alias ll='ls -l --color=auto'" >> ~/.bashrc
+    && echo "alias ll='ls -l --color=auto'" >> ~/.bashrc
 
 # 安装 Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
