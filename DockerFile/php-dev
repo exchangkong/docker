@@ -45,7 +45,7 @@ RUN apk add --no-cache \
         freetype \
         imagemagick \
         libmemcached-libs \
-        libc6-compat \
+        libc6-compat
 #
 # 清理缓存
 RUN rm -rf /var/cache/apk/* \
