@@ -15,12 +15,12 @@ services:
     ports: 
       - "3306:3306"
     volumes:
-      - /Users/kk/www/docker/mysql/data:/var/lib/mysql
-      - /Users/kk/www/docker/mysql/conf:/etc/mysql
+      - ${SERVERROOT}/mysql/data:/var/lib/mysql
+      - ${SERVERROOT}/mysql/conf:/etc/mysql
   redis:
     image: redis:alpine
     volumes:
-      - /Users/kk/www/docker/redis/conf:/usr/local/etc/redis
+      - ${SERVERROOT}/redis/conf:/usr/local/etc/redis
     ports:
       - "6379:6379"
   rabbitmq:
@@ -34,9 +34,11 @@ services:
       - 5672:5672 
       - 15671:15671
       - 15672:15672
+    volumes:
+      - ${SERVERROOT}/rabbitmq:/var/lib/rabbitmq
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+  #adminer:
+  #  image: adminer
+  #  restart: always
+  #  ports:
+  #    - 8080:8080

@@ -1,0 +1,44 @@
+#version: "3"
+services:
+  php:
+    build:
+      context: ./DockerFile
+      dockerfile: php-dev
+      #cache_from:
+      #  - php:8.3.7-fpm-alpine3.19
+    #自定义构建镜像名称，使用次参数会用warning提示
+    image: php:8.3.7-fpm-alpine3.19-custom
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./etc/php/php-fpm.conf:/usr/local/etc/php-fpm.conf
+      - ./etc/php/php-fpm.d:/usr/local/etc/php-fpm.d
+      - ./etc/php/php.ini:/usr/local/etc/php/php.ini
+      - ./etc/php/pear.conf:/usr/local/etc/php/pear.conf
+      - ./logs/php:/usr/local/var/log
+      - ${WWWROOT}:/var/www/html
+    cap_add:
+      - ALL
+    #command: ["/bin/sh", "-c", "php-fpm"]
+    networks:
+      - server
+  nginx:
+    image: nginx:stable-alpine3.19-perl
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./etc/nginx/conf.d:/etc/nginx/conf.d
+      - ${WWWROOT}:/var/www/html
+      - ./logs/nginx:/var/log/nginx
+      - ${CERTROOT}:/var/cert
+      #- ${FRONTROOT}:/var/www/html/frontend
+    cap_add:
+      - ALL
+    #command: ["/bin/sh", "-c", "nginx -g 'daemon off;'"]
+    networks:
+      - server
+
+networks:
+   server:
+     driver: bridge

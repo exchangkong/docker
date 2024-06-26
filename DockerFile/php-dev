@@ -35,7 +35,7 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     && docker-php-ext-install -j$(nproc) pdo_mysql \
     && pecl install memcached \
     && docker-php-ext-enable memcached \
-    && apk del .build-deps libmemcached-dev zlib-dev freetype-dev libpng-dev libjpeg-turbo-dev 
+    && apk del .build-deps libmemcached-dev zlib-dev freetype-dev libpng-dev libjpeg-turbo-dev
 
 # 安装 runtime 依赖
 RUN apk add --no-cache \
